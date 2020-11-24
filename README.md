@@ -15,3 +15,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 ## Server Backend
 L'application est interfacée avec une application Django lequels codes se trouvent sur le repository suivant
 `https://github.com/obidano/backend_kinshasa_digital`
+
+## Server Prod
+L'application Prod se trouve sur ce lien :
+`http://80.209.224.27:8087/`

@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {Component, isDevMode, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatDialog} from "@angular/material/dialog";
@@ -25,6 +25,8 @@ export class ContactsComponent implements OnInit {
 
   selected = {};
 
+  base_url = "http://http://80.209.224.27";
+
   @ViewChild('confirmDeleteDialog') confirmDeleteDialog: TemplateRef<any>;
 
   constructor(private _fb: FormBuilder,
@@ -39,6 +41,11 @@ export class ContactsComponent implements OnInit {
     this.searchForm = this._fb.group({
       search: [],
     });
+
+    if (isDevMode()) {
+      this.base_url = "http://127.0.0.1";
+
+    }
     this.getData();
   }
 
@@ -59,7 +66,7 @@ export class ContactsComponent implements OnInit {
     this.onDataChanged.next([]);
     this.spinner.show();
     return new Promise((resolve, reject) => {
-        this._httpClient.get('http://127.0.0.1:8000/contacts/all')
+        this._httpClient.get(this.base_url + ':8000/contacts/all')
           .subscribe((response: any) => {
             console.log('http', response)
             this.hideSpinner();
@@ -97,7 +104,7 @@ export class ContactsComponent implements OnInit {
             this.spinner.show();
 
             await new Promise((resolve, reject) => {
-              this._httpClient.post('http://127.0.0.1:8000/contacts/create', response)
+              this._httpClient.post(this.base_url + ':8000/contacts/create', response)
                 .subscribe((response: any) => {
                   this.hideSpinner();
                   resolve(response);
@@ -110,7 +117,7 @@ export class ContactsComponent implements OnInit {
             this.spinner.show();
 
             await new Promise((resolve, reject) => {
-              this._httpClient.post('http://127.0.0.1:8000/contacts/update', response)
+              this._httpClient.post(this.base_url + ':8000/contacts/update', response)
                 .subscribe((response: any) => {
                   this.hideSpinner();
                   resolve(response);
@@ -133,7 +140,7 @@ export class ContactsComponent implements OnInit {
           this.spinner.show();
 
           await new Promise((resolve, reject) => {
-            this._httpClient.post('http://127.0.0.1:8000/contacts/delete/' + data.id, {})
+            this._httpClient.post(this.base_url + ':8000/contacts/delete/' + data.id, {})
               .subscribe((response: any) => {
                 this.hideSpinner();
                 resolve(response);
@@ -162,7 +169,7 @@ export class ContactsComponent implements OnInit {
       this.spinner.show();
 
       return new Promise((resolve, reject) => {
-          this._httpClient.get('http://127.0.0.1:8000/contacts/search?search=' + search)
+          this._httpClient.get(this.base_url+':8000/contacts/search?search=' + search)
             .subscribe((response: any) => {
               console.log('http', response)
               this.hideSpinner();
