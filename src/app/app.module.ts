@@ -12,12 +12,18 @@ import {MatIconModule} from "@angular/material/icon";
 import {ReactiveFormsModule} from "@angular/forms";
 import {MatTableModule} from "@angular/material/table";
 import {MatMenuModule} from "@angular/material/menu";
-import {MatRippleModule} from "@angular/material/core";
+import {MatNativeDateModule, MatRippleModule} from "@angular/material/core";
+import {FormContactsComponent} from './dialogs/form-contacts/form-contacts.component';
+import {FlexLayoutModule} from "@angular/flex-layout";
+import {MatToolbarModule} from "@angular/material/toolbar";
+import {MatDialogModule} from "@angular/material/dialog";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 @NgModule({
   declarations: [
     AppComponent,
-    ContactsComponent
+    ContactsComponent,
+    FormContactsComponent
   ],
   imports: [
     BrowserModule,
@@ -30,7 +36,12 @@ import {MatRippleModule} from "@angular/material/core";
     MatTableModule,
     MatMenuModule,
     ReactiveFormsModule,
-    MatRippleModule
+    MatRippleModule,
+    FlexLayoutModule,
+    MatToolbarModule,
+    MatDialogModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

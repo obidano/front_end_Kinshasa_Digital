@@ -26,7 +26,9 @@
     </div>
 
     <div class="col-md-6">
-      <button mat-raised-button color="accent" class="float-md-right">Ajouter un Contact
+      <button mat-raised-button color="accent"
+              (click)="openContactForm()"
+              class="float-md-right">Ajouter un Contact
         <mat-icon>add</mat-icon>
       </button>
     </div>
@@ -34,7 +36,7 @@
   </div>
 
 
-  <div class="row">
+  <div class="row mt-4">
     <div style="width: 100%">
       <mat-table #table [dataSource]="dataSource"
                  style="width: 100%">
@@ -56,15 +58,15 @@
         </ng-container>
 
         <ng-container matColumnDef="prenom">
-          <mat-header-cell *matHeaderCellDef>PreNom</mat-header-cell>
-          <mat-cell *matCellDef="let data">
+          <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-sm>PreNom</mat-header-cell>
+          <mat-cell *matCellDef="let data" fxHide fxShow.gt-sm>
             <p class="text-truncate font-weight-600">{{data?.nom}}</p>
           </mat-cell>
         </ng-container>
 
         <ng-container matColumnDef="postnom">
-          <mat-header-cell *matHeaderCellDef>PostNom</mat-header-cell>
-          <mat-cell *matCellDef="let data">
+          <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-sm>PostNom</mat-header-cell>
+          <mat-cell *matCellDef="let data" fxHide fxShow.gt-sm>
             <p class="text-truncate font-weight-600">{{data?.nom}}</p>
           </mat-cell>
         </ng-container>
@@ -77,8 +79,8 @@
         </ng-container>
 
         <ng-container matColumnDef="email">
-          <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
-          <mat-cell *matCellDef="let data">
+          <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-sm>Email</mat-header-cell>
+          <mat-cell *matCellDef="let data" fxHide fxShow.gt-sm>
             <p class="text-truncate font-weight-600">{{data?.nom}}</p>
           </mat-cell>
         </ng-container>
@@ -93,8 +95,8 @@
 
 
         <ng-container matColumnDef="anniversaire">
-          <mat-header-cell *matHeaderCellDef>Anniv.</mat-header-cell>
-          <mat-cell *matCellDef="let data">
+          <mat-header-cell *matHeaderCellDef fxHide fxShow.gt-sm>Anniv.</mat-header-cell>
+          <mat-cell *matCellDef="let data" fxHide fxShow.gt-sm>
             <p class="email text-truncate">
               {{data?.updated_at}}
             </p>

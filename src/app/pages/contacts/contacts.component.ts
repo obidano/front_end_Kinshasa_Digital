@@ -1,6 +1,8 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
+import {MatDialog} from "@angular/material/dialog";
+import {FormContactsComponent} from "../../dialogs/form-contacts/form-contacts.component";
 
 @Component({
   selector: 'app-contacts',
@@ -12,8 +14,10 @@ export class ContactsComponent implements OnInit {
 
   dataSource: MatTableDataSource<any> | null;
   displayedColumns = ['id', 'nom', 'prenom', 'postnom', 'phone', 'societe', 'email', 'anniversaire', 'actions'];
+  dialogRef: any;
 
-  constructor(private _fb: FormBuilder,) {
+  constructor(private _fb: FormBuilder,
+              public _matDialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -22,4 +26,19 @@ export class ContactsComponent implements OnInit {
     });
   }
 
+  openContactForm() {
+    this.dialogRef = this._matDialog.open(FormContactsComponent, {
+      width: '700px',
+      disableClose: true,
+      data: {
+        action: 'action'
+      }
+    });
+
+    this.dialogRef.afterClosed()
+      .subscribe(async response => {
+
+        console.log('response');
+      });
+  }
 }
