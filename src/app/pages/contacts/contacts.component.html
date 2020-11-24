@@ -125,7 +125,8 @@
                   <span>Modifier</span>
                 </button>
 
-                <button mat-menu-item aria-label="remove">
+                <button mat-menu-item aria-label="remove"
+                        (click)="deleteDialog(data)">
                   <mat-icon>time</mat-icon>
                   <span>Supprimer</span>
                 </button>
@@ -138,7 +139,6 @@
         <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
         <mat-row *matRowDef="let data; columns: displayedColumns;"
                  class="contact"
-                 (click)="editData(data)"
                  matRipple
         >
         </mat-row>
@@ -149,4 +149,13 @@
     </div>
   </div>
 </div>
+
+
+<ng-template #confirmDeleteDialog>
+  <h2 matDialogTitle>Confirmer la suppression #{{selected.id}}</h2>
+  <mat-dialog-actions align="end">
+    <button mat-button matDialogClose="no">Non</button>
+    <button mat-button matDialogClose="yes" [color]="'primary'">Oui</button>
+  </mat-dialog-actions>
+</ng-template>
 

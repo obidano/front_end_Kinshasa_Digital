@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatDialog} from "@angular/material/dialog";
@@ -21,6 +21,8 @@ export class ContactsComponent implements OnInit {
   onDataChanged: BehaviorSubject<any>;
 
   private _unsubscribeAll: Subject<any>;
+
+  selected = {};
 
   @ViewChild('confirmDeleteDialog') confirmDeleteDialog: TemplateRef<any>;
 
@@ -107,6 +109,27 @@ export class ContactsComponent implements OnInit {
 
 
       });
+  }
+
+  deleteDialog(data) {
+    this.selected = data;
+    const dialogRef = this._matDialog.open(this.confirmDeleteDialog);
+    dialogRef.afterClosed().subscribe(async result => {
+      if (result !== undefined) {
+        if (result === 'yes') {
+          await new Promise((resolve, reject) => {
+            this._httpClient.post('http://127.0.0.1:8000/contacts/delete/' + data.id, {})
+              .subscribe((response: any) => {
+                resolve(response);
+              }, reject);
+          });
+
+          this.httpGetData();
+        } else if (result === 'no') {
+
+        }
+      }
+    });
   }
 
   ngOnDestroy(): void {
