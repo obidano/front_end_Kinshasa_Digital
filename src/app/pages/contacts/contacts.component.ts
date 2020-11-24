@@ -6,6 +6,7 @@ import {FormContactsComponent} from "../../dialogs/form-contacts/form-contacts.c
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, Subject} from "rxjs";
 import {takeUntil} from "rxjs/operators";
+import {NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-contacts',
@@ -28,7 +29,8 @@ export class ContactsComponent implements OnInit {
 
   constructor(private _fb: FormBuilder,
               public _matDialog: MatDialog,
-              private _httpClient: HttpClient) {
+              private _httpClient: HttpClient,
+              private spinner: NgxSpinnerService) {
     this.onDataChanged = new BehaviorSubject([]);
     this._unsubscribeAll = new Subject();
   }
@@ -55,11 +57,12 @@ export class ContactsComponent implements OnInit {
   httpGetData(): Promise<any> {
 
     this.onDataChanged.next([]);
-
+    this.spinner.show();
     return new Promise((resolve, reject) => {
         this._httpClient.get('http://127.0.0.1:8000/contacts/all')
           .subscribe((response: any) => {
             console.log('http', response)
+            this.hideSpinner();
             this.onDataChanged.next(response.msg);
             resolve(response);
           }, reject);
@@ -67,6 +70,12 @@ export class ContactsComponent implements OnInit {
     );
   }
 
+  hideSpinner() {
+    setTimeout(() => {
+      /** spinner ends after 5 seconds */
+      this.spinner.hide();
+    }, 500);
+  }
 
   openContactForm(action = 'new', data = null) {
     this.dialogRef = this._matDialog.open(FormContactsComponent, {
@@ -85,24 +94,28 @@ export class ContactsComponent implements OnInit {
 
         switch (action) {
           case "new":
+            this.spinner.show();
+
             await new Promise((resolve, reject) => {
               this._httpClient.post('http://127.0.0.1:8000/contacts/create', response)
                 .subscribe((response: any) => {
+                  this.hideSpinner();
                   resolve(response);
                 }, reject);
             });
-
             this.httpGetData();
             break;
 
           case 'update':
+            this.spinner.show();
+
             await new Promise((resolve, reject) => {
               this._httpClient.post('http://127.0.0.1:8000/contacts/update', response)
                 .subscribe((response: any) => {
+                  this.hideSpinner();
                   resolve(response);
                 }, reject);
             });
-
             this.httpGetData();
             break;
         }
@@ -117,9 +130,12 @@ export class ContactsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(async result => {
       if (result !== undefined) {
         if (result === 'yes') {
+          this.spinner.show();
+
           await new Promise((resolve, reject) => {
             this._httpClient.post('http://127.0.0.1:8000/contacts/delete/' + data.id, {})
               .subscribe((response: any) => {
+                this.hideSpinner();
                 resolve(response);
               }, reject);
           });
@@ -138,4 +154,29 @@ export class ContactsComponent implements OnInit {
     this._unsubscribeAll.complete();
   }
 
+  searchData() {
+    console.log(this.searchForm.value)
+    const search = this.searchForm.value.search;
+    if (search) {
+      this.onDataChanged.next([]);
+      this.spinner.show();
+
+      return new Promise((resolve, reject) => {
+          this._httpClient.get('http://127.0.0.1:8000/contacts/search?search=' + search)
+            .subscribe((response: any) => {
+              console.log('http', response)
+              this.hideSpinner();
+              this.onDataChanged.next(response.msg);
+
+              resolve(response);
+            }, reject);
+        }
+      );
+    }
+  }
+
+  resetSearch() {
+    this.searchForm.patchValue({search: ''});
+    this.httpGetData();
+  }
 }

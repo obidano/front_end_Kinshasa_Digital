@@ -13,11 +13,13 @@
 
   <div class="row mt-5">
     <div class="col-md-6">
+
       <form class="form-inline ml-auto" autocomplete="off" [formGroup]="searchForm">
         <mat-form-field class="example-form-field">
           <mat-label>Effectuer une recherche</mat-label>
           <input matInput type="text" formControlName="search">
-          <button mat-button matSuffix mat-icon-button aria-label="Clear">
+          <button mat-button matSuffix mat-icon-button aria-label="search"
+                  (click)="searchData()">
             <mat-icon style="font-size:30px">search</mat-icon>
           </button>
         </mat-form-field>
@@ -148,7 +150,22 @@
 
     </div>
   </div>
+
+  <div class="row mt-5">
+    <div class="col-md-6">
+      <button mat-raised-button
+              (click)="resetSearch()"
+      >
+        <mat-icon style="font-size:20px">clear</mat-icon>
+        Reinitialiser la liste
+      </button>
+    </div>
+
+  </div>
+
 </div>
+
+
 
 
 <ng-template #confirmDeleteDialog>
