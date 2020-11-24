@@ -103,16 +103,8 @@
   <div mat-dialog-actions class="m-0 p-16" fxLayout="row" fxLayoutAlign="end center"
        style="border-top:1px solid lightgray">
 
-    <button *ngIf="false"
-            mat-button
-            class="mr-8"
-            (click)="matDialogRef.close(['delete',contactForm])"
-            aria-label="Delete"
-    >
-      DELETE
-    </button>
 
-    <button *ngIf="action !== 'edit'"
+    <button *ngIf="action !== 'update'"
             mat-button
             class="save-button"
             (click)="submitData()"
@@ -121,13 +113,13 @@
       Ajouter
     </button>
 
-    <button *ngIf="action === 'edit'"
+    <button *ngIf="action === 'update'"
             mat-button
             class="save-button"
-            (click)="matDialogRef.close(['save',contactForm])"
-            [disabled]="contactForm.invalid || (!active_toggle && action!='new')"
+            (click)="submitData()"
+            [disabled]="contactForm.invalid "
             aria-label="SAVE">
-      SAVE
+      Modifier
     </button>
 
   </div>

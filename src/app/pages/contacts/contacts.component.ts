@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, TemplateRef} from '@angular/core';
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {MatTableDataSource} from "@angular/material/table";
 import {MatDialog} from "@angular/material/dialog";
@@ -22,6 +22,8 @@ export class ContactsComponent implements OnInit {
 
   private _unsubscribeAll: Subject<any>;
 
+  @ViewChild('confirmDeleteDialog') confirmDeleteDialog: TemplateRef<any>;
+
   constructor(private _fb: FormBuilder,
               public _matDialog: MatDialog,
               private _httpClient: HttpClient) {
@@ -41,7 +43,7 @@ export class ContactsComponent implements OnInit {
     this.onDataChanged
       .pipe(takeUntil(this._unsubscribeAll))
       .subscribe((datas: any) => {
-        //this.dataSource = new MatTableDataSource<any>(this.onDataChanged.value);
+        this.dataSource = new MatTableDataSource<any>(this.onDataChanged.value);
       });
 
     this.httpGetData();
@@ -64,12 +66,13 @@ export class ContactsComponent implements OnInit {
   }
 
 
-  openContactForm(action = 'new') {
+  openContactForm(action = 'new', data = null) {
     this.dialogRef = this._matDialog.open(FormContactsComponent, {
       width: '700px',
       disableClose: true,
       data: {
-        action: action
+        action: action,
+        data: data
       }
     });
 
@@ -80,12 +83,25 @@ export class ContactsComponent implements OnInit {
 
         switch (action) {
           case "new":
-            const res = await new Promise((resolve, reject) => {
+            await new Promise((resolve, reject) => {
               this._httpClient.post('http://127.0.0.1:8000/contacts/create', response)
                 .subscribe((response: any) => {
                   resolve(response);
                 }, reject);
             });
+
+            this.httpGetData();
+            break;
+
+          case 'update':
+            await new Promise((resolve, reject) => {
+              this._httpClient.post('http://127.0.0.1:8000/contacts/update', response)
+                .subscribe((response: any) => {
+                  resolve(response);
+                }, reject);
+            });
+
+            this.httpGetData();
             break;
         }
 

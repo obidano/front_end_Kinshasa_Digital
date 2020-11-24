@@ -18,6 +18,11 @@ export class FormContactsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.action = this._data.action;
+    if (this._data.data != null) {
+      this.data = this._data.data;
+    }
+
     this.contactForm = this._fb.group({
       nom: [this.data.nom, Validators.required],
       prenom: [this.data.prenom, Validators.required],
@@ -47,7 +52,9 @@ export class FormContactsComponent implements OnInit {
 
   submitData() {
     const form = {...this.contactForm.value};
-
+    if (this.action == 'update') {
+      form.id = this._data.data.id;
+    }
     form.anniversaire = this.formatDate(form.anniversaire);
     console.log('form', form);
     this.matDialogRef.close(form);
