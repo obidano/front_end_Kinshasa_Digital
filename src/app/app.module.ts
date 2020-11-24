@@ -18,6 +18,7 @@ import {FlexLayoutModule} from "@angular/flex-layout";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {MatDialogModule} from "@angular/material/dialog";
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
     MatDialogModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -21,17 +21,35 @@ export class FormContactsComponent implements OnInit {
     this.contactForm = this._fb.group({
       nom: [this.data.nom, Validators.required],
       prenom: [this.data.prenom, Validators.required],
-      postnom: [this.data.postnom, Validators.required],
-      phone: [this.data.phone, Validators.required],
+      postnom: [this.data.postnom],
+      phone: [this.data.phone, [Validators.required,
+        Validators.pattern('^\\+243(89|88|90|81|84|99|97|82)\\d{7}')]],
       societe: [this.data.societe, Validators.required],
-      email: [this.data.email, Validators.required],
+      email: [this.data.email, [Validators.required,
+        Validators.pattern('[^@]+@[^@]+\\.[^@]+')]],
       anniversaire: [this.data.anniversaire, Validators.required],
     });
   }
 
+  formatDate(date) {
+    var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
   submitData() {
     const form = {...this.contactForm.value};
-    console.log('form', form);
 
+    form.anniversaire = this.formatDate(form.anniversaire);
+    console.log('form', form);
+    this.matDialogRef.close(form);
   }
 }
