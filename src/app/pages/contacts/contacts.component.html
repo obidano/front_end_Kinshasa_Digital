@@ -1,32 +1,151 @@
 <div class="container mt-3">
-  <nav class="navbar navbar-expand-md navbar-light bg-light">
+  <nav class="navbar navbar-expand-md navbar-light bg-light" style="background: transparent !important;">
     <a href="#" class="navbar-brand">Annuaire</a>
     <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarCollapse">
-      <form class="form-inline ml-auto">
-        <input type="text" class="form-control mr-sm-2" placeholder="Search">
-        <button type="submit" class="btn btn-outline-light">Search</button>
 
+    </div>
+  </nav>
+
+
+  <div class="row mt-5">
+    <div class="col-md-6">
+      <form class="form-inline ml-auto" autocomplete="off" [formGroup]="searchForm">
         <mat-form-field class="example-form-field">
-          <mat-label>Clearable input</mat-label>
-          <input matInput type="text">
-          <button mat-button matSuffix mat-icon-button aria-label="Clear" (click)="value=''">
-            <mat-icon>close</mat-icon>
+          <mat-label>Effectuer une recherche</mat-label>
+          <input matInput type="text" formControlName="search">
+          <button mat-button matSuffix mat-icon-button aria-label="Clear">
+            <mat-icon style="font-size:30px">search</mat-icon>
           </button>
         </mat-form-field>
 
       </form>
     </div>
-  </nav>
 
+    <div class="col-md-6">
+      <button mat-raised-button color="accent" class="float-md-right">Ajouter un Contact
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
 
-  <div class="row"></div>
+  </div>
 
 
   <div class="row">
+    <div style="width: 100%">
+      <mat-table #table [dataSource]="dataSource"
+                 style="width: 100%">
+
+
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef>ID</mat-header-cell>
+          <mat-cell *matCellDef="let data">
+            <p class="text-truncate font-weight-600">#{{data?.id}}</p>
+          </mat-cell>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="nom">
+          <mat-header-cell *matHeaderCellDef>Nom</mat-header-cell>
+          <mat-cell *matCellDef="let data">
+            <p class="text-truncate font-weight-600">{{data?.nom}}</p>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="prenom">
+          <mat-header-cell *matHeaderCellDef>PreNom</mat-header-cell>
+          <mat-cell *matCellDef="let data">
+            <p class="text-truncate font-weight-600">{{data?.nom}}</p>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="postnom">
+          <mat-header-cell *matHeaderCellDef>PostNom</mat-header-cell>
+          <mat-cell *matCellDef="let data">
+            <p class="text-truncate font-weight-600">{{data?.nom}}</p>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="phone">
+          <mat-header-cell *matHeaderCellDef>Phone</mat-header-cell>
+          <mat-cell *matCellDef="let data">
+            <p class="text-truncate font-weight-600">{{data?.nom}}</p>
+          </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+          <mat-cell *matCellDef="let data">
+            <p class="text-truncate font-weight-600">{{data?.nom}}</p>
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="societe">
+          <mat-header-cell *matHeaderCellDef>Societé</mat-header-cell>
+          <mat-cell *matCellDef="let data">
+            <p class="text-truncate font-weight-600">{{data?.nom}}</p>
+          </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="anniversaire">
+          <mat-header-cell *matHeaderCellDef>Anniv.</mat-header-cell>
+          <mat-cell *matCellDef="let data">
+            <p class="email text-truncate">
+              {{data?.updated_at}}
+            </p>
+          </mat-cell>
+        </ng-container>
+
+
+        <!-- Buttons Column -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let data">
+            <div fxFlex="row">
+              <button mat-icon-button (click)="$event.stopPropagation();toggleStar(data)"
+                      aria-label="Toggle star">
+                <mat-icon class="secondary-text" *ngIf="!data?.active"
+                          style="color: grey">bookmark
+                </mat-icon>
+                <mat-icon class="secondary-text" *ngIf="data?.active"
+                          style="color: darkorange">bookmark
+                </mat-icon>
+              </button>
+
+              <button mat-icon-button [matMenuTriggerFor]="moreMenu" aria-label="More"
+                      (click)="$event.stopPropagation();">
+                <mat-icon class="secondary-text">more_vert</mat-icon>
+              </button>
+
+              <mat-menu #moreMenu="matMenu">
+                <button mat-menu-item aria-label="remove">
+                  <mat-icon>info</mat-icon>
+                  <span>No Options</span>
+                </button>
+              </mat-menu>
+            </div>
+
+          </mat-cell>
+        </ng-container>
+
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let data; columns: displayedColumns;"
+                 class="contact"
+                 (click)="editData(data)"
+                 [ngClass]="{'accent-50':checkboxes[data.id]}"
+                 matRipple
+        >
+        </mat-row>
+
+
+      </mat-table>
+
+    </div>
   </div>
 </div>
 
